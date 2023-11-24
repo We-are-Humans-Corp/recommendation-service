@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: arm64v8/postgres
+    container_name: recommendation_service_postgres
+    environment:
+      POSTGRES_DB: recommendation_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"

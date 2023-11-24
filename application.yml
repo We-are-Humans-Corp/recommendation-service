@@ -1,0 +1,27 @@
+service-configuration:
+    data-layer:
+        adapter:
+            a-formula-data-url: "http://localhost:5002/v1/formula-data/a-formula/{user_id}"
+            r-formula-data-url: "http://localhost:5002/v1/formula-data/r-formula/{user_id}"
+            post-rating-formula-data-url: "http://localhost:5002/v1/formula-data/post-rating/{user_id}"
+            karma-formula-data-url: "http://localhost:5002/v1/formula-data/karma-formula/{user_id}"
+            karma-level-formula-data-url: "http://localhost:5002/v1/formula-data/karma-level/{user_id}"
+        postgres:
+            url: "postgresql://postgres:postgres@localhost:5432/postgres"
+            schema: "recommendation_service"
+            table: "recommendation"
+            sql-engine:
+                pool-size: 10
+                pool-timeout-in-s: 180
+                pool-recycle-in-s: 1800
+
+        csv:
+            path_to_file: "./test-ratings.csv"
+
+    cache:
+        trainset: 60000
+
+    http:
+        port: 5001
+
+
