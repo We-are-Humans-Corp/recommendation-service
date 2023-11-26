@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import datetime
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ class KarmaFormulaData:
         self.post_rating_sum_iterations = None
 
 # Endpoint: GET /v1/formula-data/karma-formula/:userId
-@app.route('/v1/formula-data/к/<userId>', methods=['GET'])
+@app.route('/v1/formula-data/karma-formula/<userId>', methods=['GET'])
 def karma_formula(userId):
     karma_formula_data = KarmaFormulaData(user_id=userId)
 
@@ -206,6 +206,27 @@ def post_rating(userId):
 
     response = {attr: getattr(post_rating_external_data, attr) for attr in vars(post_rating_external_data)}
     return jsonify(response)
+
+
+# Define the class for parsing incoming JSON data
+class CalculationResult:
+    def __init__(self, karma_value, karma_lvl_value, user_id):
+        self.karma_value = karma_value
+        self.karma_lvl_value = karma_lvl_value
+        self.user_id = user_id
+
+    def __repr__(self):
+        return f"CalculationResult(karma_value={self.karma_value}, karma_lvl_value={self.karma_lvl_value})"
+
+
+@app.route('/v1/update-info', methods=['POST'])
+def update_info():
+    data = request.get_json()
+    # Create an instance of CalculationResult
+    calculation_result = CalculationResult(**data)
+    print(f"CalculationResult(karma_value={calculation_result.karma_value}, karma_lvl_value={calculation_result.karma_lvl_value}, user_id={calculation_result.user_id})")
+
+    return jsonify({"message": "Data received successfully"}), 200
 
 if __name__ == '__main__':
     app.run(port=5002)

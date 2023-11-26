@@ -53,6 +53,10 @@ class AppConfig:
         return self.config['service-configuration']['data-layer']['adapter']['karma-level-formula-data-url']
 
     @property
+    def update_userinfo_url(self):
+        return self.config['service-configuration']['data-layer']['adapter']['update-user-values-url']
+
+    @property
     def trainset_cache_time(self):
         return self.config['service-configuration']['cache']['trainset']
 

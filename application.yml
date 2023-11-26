@@ -6,6 +6,7 @@ service-configuration:
             post-rating-formula-data-url: "http://localhost:5002/v1/formula-data/post-rating/{user_id}"
             karma-formula-data-url: "http://localhost:5002/v1/formula-data/karma-formula/{user_id}"
             karma-level-formula-data-url: "http://localhost:5002/v1/formula-data/karma-level/{user_id}"
+            update-user-values-url: "http://localhost:5002/v1/update-info"
         postgres:
             url: "postgresql://postgres:postgres@localhost:5432/postgres"
             schema: "recommendation_service"

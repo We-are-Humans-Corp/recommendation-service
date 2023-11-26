@@ -22,6 +22,7 @@ class FormulaService:
         self.post_rating_formula_data_url = self.app_config.post_rating_formula_data_url
         self.karma_formula_data_url = self.app_config.karma_formula_data_url
         self.karma_level_formula_data_url = self.app_config.karma_level_formula_data_url
+        self.update_url = self.app_config.update_userinfo_url
 
 
     class FloatValidator:
@@ -424,22 +425,21 @@ class FormulaService:
 
         calculated_karma_level_data = karma_level_data.calculate_karma_level_formula()
 
+        #update info
+        data = {
+            "karma_value": calculated_karma_formula_data.final_formula_result,
+            "karma_lvl_value": calculated_karma_level_data.final_formula_result,
+            "user_id": user_id
+        }
+
+        url_template = self.update_url
+
+        response = requests.post(url_template, json=data)
+
+        # Print the response from the server
+        print(response.text)
+        if response.status_code != 200:
+            raise FormulaServiceError("Failed to update user data")
+
         return self.CalculationResult(karma_value=calculated_karma_formula_data.final_formula_result,
                                       karma_lvl_value=calculated_karma_level_data.final_formula_result)
-
-
-# formula_service = FormulaService()
-# calculation_result = formula_service.calculate_for_user(1)
-# print("Karma Rating: ", calculation_result.karma_value)
-# print("KarmaLevel Rating: ", calculation_result.karma_lvl_value)
-#
-# todo:
-#                 1*) Расчет A(t) R(t) S(t) K(t) и L(t) формулы и остальных
-#                 1.1*) предусмотреть метод понижения значения кармы оставить пустым
-#                 2) Запрос данных отдельно по каждой формуле клиентом
-#                 4) обновление данных запросом к адаптеру
-#                 6) тесты
-#                 7) работа с датафреймом
-#                 7.1) запрос данных не из ксв а из базы
-#                 7.2) ручка по добавлению инфы в датасет
-#                 8) документация на сервис кармы и датасет
