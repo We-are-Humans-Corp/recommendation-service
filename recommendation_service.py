@@ -39,14 +39,18 @@ class RecommendationService:
             if not rating_col:
                 raise RecommendationServiceError("Rating column name cannot be null or empty")
 
-            # Check if cache is expired
-            if RecommendationService.trainset_cache is None or (
-                    current_time - RecommendationService.last_cache_update) > RecommendationService.CACHE_EXPIRY_TIME:
-                data = self.data_access.load_data_from_db(user_col, item_col, rating_col)
-                RecommendationService.trainset_cache = data.build_full_trainset()
-                RecommendationService.last_cache_update = current_time
+            # Check if cache is expired   ## different fields require different trinset
+            # if RecommendationService.trainset_cache is None or (
+            #         current_time - RecommendationService.last_cache_update) > RecommendationService.CACHE_EXPIRY_TIME:
+            #     data = self.data_access.load_data_from_db(user_col, item_col, rating_col)
+            #     RecommendationService.trainset_cache = data.build_full_trainset()
+            #     RecommendationService.last_cache_update = current_time
+            #
+            # trainset = RecommendationService.trainset_cache
 
-            trainset = RecommendationService.trainset_cache
+            data = self.data_access.load_data_from_db(user_col, item_col, rating_col)
+
+            trainset = data.build_full_trainset()
 
             # Choose the algorithm based on algo parameter
             if algo == 'KNN':
