@@ -56,3 +56,22 @@ response:
 ----
 
 
+### Calculate Karma Endpoint
+
+[source,bash]
+----
+POST: http://localhost:5001/v1/calculate-karma
+
+request:
+{
+    "user_id" : 1
+}
+
+response:
+{
+    "karma_lvl_value": 3.828641396489095,
+    "karma_value": 46.0,
+    "user_id": 1
+}
+----
+

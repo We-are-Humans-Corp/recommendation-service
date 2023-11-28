@@ -30,7 +30,7 @@ class RecommendationService:
         self.formula_service = FormulaService()
 
     def train_model(self, user_col: str, item_col: str, rating_col: str, algo='KNN'):
-        current_time = time.time()
+        #current_time = time.time()
         try:
             if not user_col:
                 raise RecommendationServiceError("User column name cannot be null or empty")
@@ -85,14 +85,15 @@ class RecommendationService:
             if n is None or n <= 0:
                 raise RecommendationServiceError("Number of recommendations 'n' must be a positive integer")
 
-            calculation_result = self.formula_service.calculate_for_user(user_id)
+            #calculation_result = self.formula_service.calculate_for_user(user_id)
 
-            logging.getLogger(RecommendationService.__name__).info(f"Karma lvl for user {user_id}: {calculation_result.karma_lvl_value}")
+            #logging.getLogger(RecommendationService.__name__).info(f"Karma lvl for user {user_id}: {calculation_result.karma_lvl_value}")
 
             self.train_model(user_col, item_col, rating_col, algo)
             predictions = self._predict_ratings(user_id, user_col, item_col, rating_col)
 
-            pred_ratings = pd.DataFrame([(pred.uid, pred.iid, pred.est * calculation_result.karma_lvl_value) for pred in predictions],
+
+            pred_ratings = pd.DataFrame([(pred.uid, pred.iid, pred.est) for pred in predictions],
                                         columns=[user_col, item_col, rating_col]).sort_values(rating_col, ascending=False)  # order control:  ascending=False
 
             recommendations = pred_ratings.head(n)

@@ -55,7 +55,8 @@ class DataAccess:
     def load_data_from_db(self, user_col, item_col, rating_col, rating_scale=(1, 5)):
         try:
             # \" -> no sql inj possible
-            query = f"SELECT \"{user_col}\", \"{item_col}\", \"{rating_col}\" FROM \"{self.pg_schema}\".\"{self.pg_table}\""
+            #query = f"SELECT \"{user_col}\", \"{item_col}\", \"{rating_col}\" FROM \"{self.pg_schema}\".\"{self.pg_table}\""
+            query = f"SELECT * FROM \"{self.pg_schema}\".\"{self.pg_table}\""
 
             df = pd.read_sql(query, DataAccess.engine)
             reader = Reader(rating_scale=rating_scale)

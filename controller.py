@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from recommendation_service import RecommendationService
 from data_access import DataAccess
 from app_configuration import AppConfig
-
+from recommendation_service import FormulaService
 # Initialize Colorama for colored console output
 init()
 class ColoredConsoleHandler(logging.StreamHandler):
@@ -34,6 +34,34 @@ rec_service = RecommendationService(csv_repo)
 
 
 class RecommendationController:
+
+    @staticmethod
+    @app.route('/v1/calculate-karma', methods=['POST'])
+    def calculateKarma():
+        try:
+
+            data = request.json
+
+            user_id = data.get('user_id')
+
+            if user_id is None:
+                raise ValueError("User ID cannot be null")
+
+            calculation_result = FormulaService().calculate_for_user(user_id)
+
+            logging.getLogger(RecommendationController.__name__).info(f"Karma lvl for user {user_id}: {calculation_result.karma_lvl_value}")
+
+            response_data = {
+                "karma_value": calculation_result.karma_value,
+                "karma_lvl_value": calculation_result.karma_lvl_value,
+                "user_id": user_id
+            }
+
+            return response_data
+        except Exception as e:
+            logging.getLogger(RecommendationController.__name__).error("Error in /v1/calculate-karma: %s", e)
+            return jsonify({"error_type": type(e).__name__, "error_message": str(e)}), 503
+
     @staticmethod
     @app.route('/v1/recommend', methods=['POST'])
     def recommend():
